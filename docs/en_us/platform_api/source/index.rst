@@ -1,15 +1,21 @@
-################################################
-edX Platform API Version 0.5
-################################################
+##################
+EdX Platform APIs
+##################
 
 .. toctree::
-    :maxdepth: 2
+    :titlesonly:
     
     read_me
     preface
+    change_log
+ 
+.. toctree::
+    :numbered:
+    :maxdepth: 2
+
     overview
     authentication
-    endpoints
-    users
-    course_info
-    video_outlines
+    mobile/index
+    enrollment/index
+    user/index
+    course_structure/index
