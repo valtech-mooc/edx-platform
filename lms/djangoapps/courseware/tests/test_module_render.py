@@ -983,6 +983,7 @@ class TestAnonymousStudentId(ModuleStoreTestCase, LoginEnrollmentTestCase):
             _field_data_cache={},
             _dirty_fields={},
             fields={},
+            days_early_for_beta=None,
         )
         descriptor.runtime = CombinedSystem(descriptor._runtime, None)  # pylint: disable=protected-access
         # Use the xblock_class's bind_for_student method
