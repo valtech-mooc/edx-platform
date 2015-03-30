@@ -251,7 +251,11 @@ class UserProfile(models.Model):
     goals = models.TextField(blank=True, null=True)
     allow_certificate = models.BooleanField(default=1)
     bio = models.TextField(blank=True, null=True)
-    has_profile_image = models.BooleanField(default=0)
+    profile_image_version = models.CharField(max_length=16, null=True)
+
+    @property
+    def has_profile_image(self):
+        return self.profile_image_version is not None
 
     def get_meta(self):  # pylint: disable=missing-docstring
         js_str = self.meta
@@ -321,7 +325,7 @@ def user_profile_pre_save_callback(sender, **kwargs):
 
     # Remove profile images for users who require parental consent
     if user_profile.requires_parental_consent() and user_profile.has_profile_image:
-        user_profile.has_profile_image = False
+        user_profile.profile_image_version = None
 
 
 class UserSignupSource(models.Model):
