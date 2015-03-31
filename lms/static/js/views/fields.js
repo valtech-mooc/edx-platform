@@ -481,7 +481,7 @@
                     title: this.options.title,
                     linkTitle: this.options.linkTitle,
                     linkHref: this.options.linkHref,
-                    message: this.helpMessage,
+                    message: this.helpMessage
                 }));
                 return this;
             },
