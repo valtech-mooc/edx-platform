@@ -608,12 +608,15 @@ class TestMidcourseReverification(ModuleStoreTestCase):
 class VerificationCheckpointTest(ModuleStoreTestCase):
     """Tests for the VerificationCheckpoint model. """
 
+    MIDTERM = "midterm"
+    FINAL = "final"
+
     def setUp(self):
         super(VerificationCheckpointTest, self).setUp()
         self.user = UserFactory.create()
         self.course = CourseFactory.create()
 
-    @ddt.data('midterm', "final")
+    @ddt.data(MIDTERM, FINAL)
     def test_get_verification_checkpoint(self, check_point):
         """testing class method of VerificationCheckpoint. create the object and then uses the class method to get the
         verification check point.
@@ -630,7 +633,7 @@ class VerificationCheckpointTest(ModuleStoreTestCase):
         verification check point.
         """
         # create the VerificationCheckpoint checkpoint
-        VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name='midterm')
+        VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name=self.MIDTERM)
 
         # get verification for not existing checkpoint
         self.assertEqual(VerificationCheckpoint.get_verification_checkpoint(self.course.id, 'abc'), None)
@@ -639,18 +642,18 @@ class VerificationCheckpointTest(ModuleStoreTestCase):
         """testing the unique together contraint.
         """
         # create the VerificationCheckpoint checkpoint
-        VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name="midterm")
+        VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name=self.MIDTERM)
 
         # create the VerificationCheckpoint checkpoint with same course id and checkpoint name
         with self.assertRaises(IntegrityError):
-            VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name="midterm")
+            VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name=self.MIDTERM)
 
     def test_add_verification_attempt_software_secure(self):
         """testing manytomany relationship. adding softwaresecure attempt to the verification checkpoints.
         """
         # adding two check points.
-        check_point1 = VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name="midterm")
-        check_point2 = VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name="final")
+        check_point1 = VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name=self.MIDTERM)
+        check_point2 = VerificationCheckpoint.objects.create(course_id=self.course.id, checkpoint_name=self.FINAL)
 
         # Make an attempt and added to the checkpoint1.
         check_point1.add_verification_attempt(SoftwareSecurePhotoVerification.objects.create(user=self.user))
