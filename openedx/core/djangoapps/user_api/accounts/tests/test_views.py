@@ -18,6 +18,8 @@ from openedx.core.djangoapps.user_api.accounts import ACCOUNT_VISIBILITY_PREF_KE
 from openedx.core.djangoapps.user_api.preferences.api import set_user_preference
 from .. import PRIVATE_VISIBILITY, ALL_USERS_VISIBILITY
 
+TEST_PROFILE_IMAGE_VERSION = "123"
+
 
 class UserAPITestCase(APITestCase):
     """
@@ -90,7 +92,7 @@ class UserAPITestCase(APITestCase):
         legacy_profile.mailing_address = "Park Ave"
         legacy_profile.gender = "f"
         legacy_profile.bio = "Tired mother of twins"
-        legacy_profile.has_profile_image = True
+        legacy_profile.profile_image_version = TEST_PROFILE_IMAGE_VERSION
         legacy_profile.language_proficiencies.add(LanguageProficiency(code='en'))
         legacy_profile.save()
 
@@ -116,24 +118,23 @@ class TestAccountAPI(UserAPITestCase):
         corresponds to whether the user has or hasn't set a profile
         image.
         """
+        template = '{root}/{filename}_{{size}}.{extension}'
         if has_profile_image:
             url_root = 'http://example-storage.com/profile_images'
             filename = hashlib.md5('secret' + self.user.username).hexdigest()
             file_extension = 'jpg'
+            template += '?v={}'.format(TEST_PROFILE_IMAGE_VERSION)
         else:
             url_root = 'http://testserver/static'
             filename = 'default'
             file_extension = 'png'
+        template = template.format(root=url_root, filename=filename, extension=file_extension)
         self.assertEqual(
             data['profile_image'],
             {
                 'has_image': has_profile_image,
-                'image_url_full': '{root}/{filename}_50.{extension}'.format(
-                    root=url_root, filename=filename, extension=file_extension,
-                ),
-                'image_url_small': '{root}/{filename}_10.{extension}'.format(
-                    root=url_root, filename=filename, extension=file_extension,
-                )
+                'image_url_full': template.format(size=50),
+                'image_url_small': template.format(size=10),
             }
         )
 

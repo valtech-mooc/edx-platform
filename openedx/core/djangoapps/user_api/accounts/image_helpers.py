@@ -46,15 +46,18 @@ def _get_profile_image_filename(name, size, file_extension=PROFILE_IMAGE_FILE_EX
     return '{name}_{size}.{file_extension}'.format(name=name, size=size, file_extension=file_extension)
 
 
-def _get_profile_image_urls(name, storage, file_extension=PROFILE_IMAGE_FILE_EXTENSION):
+def _get_profile_image_urls(name, storage, file_extension=PROFILE_IMAGE_FILE_EXTENSION, version=None):
     """
     Returns a dict containing the urls for a complete set of profile images,
     keyed by "friendly" name (e.g. "full", "large", "medium", "small").
     """
-    return {
-        size_display_name: storage.url(_get_profile_image_filename(name, size, file_extension=file_extension))
-        for size_display_name, size in PROFILE_IMAGE_SIZES_MAP.items()
-    }
+    def _make_url(size):  # pylint: disable=missing-docstring
+        url = storage.url(
+            _get_profile_image_filename(name, size, file_extension=file_extension)
+        )
+        return url + '?v=' + version if version is not None else url
+
+    return {size_display_name: _make_url(size) for size_display_name, size in PROFILE_IMAGE_SIZES_MAP.items()}
 
 
 def get_profile_image_names(username):
@@ -87,7 +90,11 @@ def get_profile_image_urls_for_user(user):
 
     """
     if user.profile.has_profile_image:
-        return _get_profile_image_urls(_make_profile_image_name(user.username), get_profile_image_storage())
+        return _get_profile_image_urls(
+            _make_profile_image_name(user.username),
+            get_profile_image_storage(),
+            version=user.profile.profile_image_version,
+        )
     else:
         return _get_default_profile_image_urls()
 
@@ -102,19 +109,31 @@ def _get_default_profile_image_urls():
     return _get_profile_image_urls(
         settings.PROFILE_IMAGE_DEFAULT_FILENAME,
         staticfiles_storage,
-        file_extension=settings.PROFILE_IMAGE_DEFAULT_FILE_EXTENSION
+        file_extension=settings.PROFILE_IMAGE_DEFAULT_FILE_EXTENSION,
     )
 
 
-def set_has_profile_image(username, has_profile_image=True):
+def get_profile_image_version(username):
+    """
+    System (not user-facing) API call used to check the current version of
+    the user-uploaded profile image (if any).  Used by profile_image API.
+    """
+    try:
+        return UserProfile.objects.get(user__username=username).profile_image_version
+    except ObjectDoesNotExist:
+        raise UserNotFound()
+
+
+def set_profile_image_version(username, version):
     """
     System (not user-facing) API call used to store whether the user has
     uploaded a profile image.  Used by profile_image API.
     """
+    assert isinstance(version, (str, unicode, type(None)))
     try:
         profile = UserProfile.objects.get(user__username=username)
     except ObjectDoesNotExist:
         raise UserNotFound()
 
-    profile.has_profile_image = has_profile_image
+    profile.profile_image_version = version
     profile.save()

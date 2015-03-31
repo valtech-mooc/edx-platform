@@ -12,6 +12,7 @@ from ..image_helpers import get_profile_image_urls_for_user
 from student.tests.factories import UserFactory
 
 TEST_SIZES = {'full': 50, 'small': 10}
+TEST_PROFILE_IMAGE_VERSION = "123"
 
 
 @patch.dict('openedx.core.djangoapps.user_api.accounts.image_helpers.PROFILE_IMAGE_SIZES_MAP', TEST_SIZES, clear=True)
@@ -25,17 +26,17 @@ class ProfileImageUrlTestCase(TestCase):
         self.user = UserFactory()
         # Ensure that parental controls don't apply to this user
         self.user.profile.year_of_birth = 1980
-        self.user.profile.has_profile_image = False
+        self.user.profile.profile_image_version = TEST_PROFILE_IMAGE_VERSION
         self.user.profile.save()
 
-    def verify_url(self, actual_url, expected_name, expected_pixels):
+    def verify_url(self, actual_url, expected_name, expected_pixels, expected_version):
         """
         Verify correct url structure.
         """
         self.assertEqual(
             actual_url,
-            'http://example-storage.com/profile_images/{name}_{size}.jpg'.format(
-                name=expected_name, size=expected_pixels
+            'http://example-storage.com/profile_images/{name}_{size}.jpg?v={version}'.format(
+                name=expected_name, size=expected_pixels, version=expected_version
             )
         )
 
@@ -48,7 +49,7 @@ class ProfileImageUrlTestCase(TestCase):
             '/static/default_{size}.png'.format(size=expected_pixels)
         )
 
-    def verify_urls(self, expected_name, actual_urls, is_default=False):
+    def verify_urls(self, actual_urls, expected_name, is_default=False):
         """
         Verify correct url dictionary structure.
         """
@@ -57,18 +58,18 @@ class ProfileImageUrlTestCase(TestCase):
             if is_default:
                 self.verify_default_url(url, TEST_SIZES[size_display_name])
             else:
-                self.verify_url(url, expected_name, TEST_SIZES[size_display_name])
+                self.verify_url(url, expected_name, TEST_SIZES[size_display_name], TEST_PROFILE_IMAGE_VERSION)
 
     def test_get_profile_image_urls(self):
         """
         Tests `get_profile_image_urls_for_user`
         """
-        self.user.profile.has_profile_image = True
+        self.user.profile.profile_image_version = TEST_PROFILE_IMAGE_VERSION
         self.user.profile.save()
         expected_name = hashlib.md5('secret' + self.user.username).hexdigest()
         actual_urls = get_profile_image_urls_for_user(self.user)
-        self.verify_urls(expected_name, actual_urls)
+        self.verify_urls(actual_urls, expected_name, is_default=False)
 
-        self.user.profile.has_profile_image = False
+        self.user.profile.profile_image_version = None
         self.user.profile.save()
-        self.verify_urls('default', get_profile_image_urls_for_user(self.user), is_default=True)
+        self.verify_urls(get_profile_image_urls_for_user(self.user), 'default', is_default=True)
