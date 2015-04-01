@@ -7,7 +7,6 @@ import pytz
 
 from django.conf import settings
 from django.test import TestCase
-from django.test.utils import override_settings
 from django.db.utils import IntegrityError
 from mock import patch
 from nose.tools import assert_is_none, assert_equals, assert_raises, assert_true, assert_false  # pylint: disable=E0611

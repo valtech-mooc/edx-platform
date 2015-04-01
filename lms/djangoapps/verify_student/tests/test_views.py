@@ -18,7 +18,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import mail
-from django.test.utils import override_settings
 from bs4 import BeautifulSoup
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
