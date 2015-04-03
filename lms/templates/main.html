@@ -26,7 +26,7 @@
 ## templates have access to these functions, and we can import these
 ## into non-inheriting templates via the %namespace tag.
 <%def name="theme_enabled()">
-  <% return settings.FEATURES.get("USE_CUSTOM_THEME", False) %>
+  <% return settings.FEATURES.get("USE_CUSTOM_THEME", True) %>
 </%def>
 <%def name="is_microsite()">
   <% return microsite.is_request_in_microsite() %>
@@ -37,7 +37,7 @@
     if not theme_enabled():
       return False
 
-    return getattr(settings, "THEME_NAME", None) == "stanford"
+    return getattr(settings, "THEME_NAME", None) == "valtech"
   %>
 </%def>
 
