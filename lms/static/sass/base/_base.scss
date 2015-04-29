@@ -5,6 +5,18 @@
 //   overflow-y: scroll;
 // }
 
+.lightgrey{
+  color: lightgrey;
+}
+
+.btnInscription{
+  background-color: #00bdfa; //bleu valtech
+}
+
+.btnInscription a{
+  color: white;
+}
+
 html, body {
   font-family: $sans-serif;
   font-size: 1em;
