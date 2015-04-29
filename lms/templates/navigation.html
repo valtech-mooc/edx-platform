@@ -117,9 +117,27 @@ site_status_msg = get_site_status_msg(course_id)
             <a class="cta cta-register" href="${reverse('course-specific-register', args=[course.id.to_deprecated_string()])}">${_("Register Now")}</a>
           </li>
           % else:
-          <li class="nav-global-04">
-            <a class="cta cta-register" href="/register">${_("Register Now")}</a>
+          <li class="nav-global-02">
+              <a class="cta cta-register" href="/">${_("ACCUEIL")}</a>
           </li>
+          <li class="nav-global-03">
+              <a class="cta cta-register" href="/courses">${_("LES COURS")}</a>
+          </li>
+          <li class="nav-global-04">
+              <a class="cta cta-register" href="/about">${_("LA SOCIETE")}</a>
+          </li>
+          <li class="nav-global-05">
+              <a class="cta cta-register" href="/contact">${_("CONTACTS")}</a>
+          </li>
+          <li class="nav-global-06">
+              <a class="cta cta-register" href="/login">${_("SE CONNECTER")}</a>
+          </li>
+          <li class="nav-global-07">
+              <a class="cta cta-register" href="/register">${_("INSCRIPTION")}</a>
+          </li>
+{#          <li class="nav-global-04">#}
+{#            <a class="cta cta-register" href="/register">${_("Register Now")}</a>#}
+{#          </li>#}
           % endif
       % endif
     </ol>
