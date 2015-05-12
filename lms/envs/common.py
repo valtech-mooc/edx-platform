@@ -176,7 +176,7 @@ FEATURES = {
     # WARNING: THIS SHOULD ALWAYS BE SET TO FALSE UNDER NORMAL
     # LMS OPERATION. See analytics.py for details about what
     # this does.
-    'RUN_AS_ANALYTICS_SERVER_ENABLED': False,
+    'RUN_AS_ANALYTICS_SERVER_ENABLED': True,
 
     # Flip to True when the YouTube iframe API breaks (again)
     'USE_YOUTUBE_OBJECT_API': False,
@@ -227,22 +227,22 @@ FEATURES = {
 
     # Toggle to enable chat availability (configured on a per-course
     # basis in Studio)
-    'ENABLE_CHAT': False,
+    'ENABLE_CHAT': True,
 
     # Allow users to enroll with methods other than just honor code certificates
     'MULTIPLE_ENROLLMENT_ROLES': False,
 
     # Toggle the availability of the shopping cart page
-    'ENABLE_SHOPPING_CART': False,
+    'ENABLE_SHOPPING_CART': True,
 
     # Toggle storing detailed billing information
-    'STORE_BILLING_INFO': False,
+    'STORE_BILLING_INFO': True,
 
     # Enable flow for payments for course registration (DIFFERENT from verified student flow)
-    'ENABLE_PAID_COURSE_REGISTRATION': False,
+    'ENABLE_PAID_COURSE_REGISTRATION': True,
 
     # Enable the display of cosmetic course price display (set in course advanced settings)
-    'ENABLE_COSMETIC_DISPLAY_PRICE': False,
+    'ENABLE_COSMETIC_DISPLAY_PRICE': True,
 
     # Automatically approve student identity verification attempts
     'AUTOMATIC_VERIFY_STUDENT_IDENTITY_FOR_TESTING': False,
@@ -351,7 +351,7 @@ FEATURES = {
     'MODE_CREATION_FOR_TESTING': False,
 
     # Courseware search feature
-    'ENABLE_COURSEWARE_SEARCH': False,
+    'ENABLE_COURSEWARE_SEARCH': True,
 
     # log all information from cybersource callbacks
     'LOG_POSTPAY_CALLBACKS': True,
@@ -765,8 +765,8 @@ STATICFILES_DIRS = [
 FAVICON_PATH = 'images/favicon.ico'
 
 # Locale/Internationalization
-TIME_ZONE = 'America/New_York'  # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-LANGUAGE_CODE = 'en'  # http://www.i18nguy.com/unicode/language-identifiers.html
+TIME_ZONE = 'Europe/Paris'  # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+LANGUAGE_CODE = 'fr'  # http://www.i18nguy.com/unicode/language-identifiers.html
 # these languages display right to left
 LANGUAGES_BIDI = ("en@rtl", "he", "ar", "fa", "ur", "fa-ir")
 
@@ -939,7 +939,7 @@ CC_PROCESSOR = {
 }
 
 # Setting for PAID_COURSE_REGISTRATION, DOES NOT AFFECT VERIFIED STUDENTS
-PAID_COURSE_REGISTRATION_CURRENCY = ['usd', '$']
+PAID_COURSE_REGISTRATION_CURRENCY = ['euros', '€']
 
 # Members of this group are allowed to generate payment reports
 PAYMENT_REPORT_GENERATOR_GROUP = 'shoppingcart_report_access'
@@ -2126,7 +2126,7 @@ COURSE_CATALOG_VISIBILITY_PERMISSION = 'see_exists'
 COURSE_ABOUT_VISIBILITY_PERMISSION = 'see_exists'
 
 #date format the api will be formatting the datetime values
-API_DATE_FORMAT = '%Y-%m-%d'
+API_DATE_FORMAT = '%d-%m-%Y'
 
 # Enrollment API Cache Timeout
 ENROLLMENT_COURSE_DETAILS_CACHE_TIMEOUT = 60
